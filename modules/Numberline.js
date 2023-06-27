@@ -35,11 +35,11 @@ export default class Numberline {
 
 			const operationBlock = document.createElement("div");
 			operationBlock.classList.add("operation-block");
-            operationBlock.textContent = position;
 			positionDivContainer.appendChild(operationBlock);
-
+            
 			const viewBlock = document.createElement("div");
 			viewBlock.classList.add("view-block");
+            viewBlock.textContent = position;
 			positionDivContainer.appendChild(viewBlock);
 
             this.container.appendChild(positionDivContainer);

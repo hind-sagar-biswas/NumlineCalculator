@@ -1,1 +1,41 @@
-/*# sourceMappingURL=app.css.map */
+.numberline-position-container {
+  width: 50px;
+}
+.numberline-position-container div {
+  aspect-ratio: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.numberline-position-container div:first-child {
+  border-bottom: 1px solid #333333;
+}
+.numberline-position-container div:first-child::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-bottom-color: #333333;
+}
+.numberline-position-container div:last-child {
+  border-top: 1px solid #333333;
+}
+.numberline-position-container div:last-child::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: #333333;
+}
+
+#numberline-container {
+  margin-inline: auto;
+  min-width: 600px;
+  justify-content: center;
+}/*# sourceMappingURL=app.css.map */
