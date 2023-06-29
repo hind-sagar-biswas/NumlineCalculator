@@ -38,4 +38,9 @@
   margin-inline: auto;
   min-width: 600px;
   justify-content: center;
+}
+
+#form-container {
+  max-width: 200px;
+  margin: auto;
 }/*# sourceMappingURL=app.css.map */
