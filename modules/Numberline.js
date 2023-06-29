@@ -11,15 +11,23 @@ export default class Numberline {
 		this.line = this.createLine();
 	}
 
-	getMax() { return this.#max }
-	getMin() { return this.#min }
+	getMax() {
+		return this.#max;
+	}
+	getMin() {
+		return this.#min;
+	}
 
 	createLine() {
-		return Array.from({ length: this.#max - this.#min + 1 }, (_, i) => this.#min + i);
+		return Array.from(
+			{ length: this.#max - this.#min + 1 },
+			(_, i) => this.#min + i
+		);
 	}
 
 	render(containerId = "numberline-container") {
 		this.#container = document.getElementById(containerId);
+		this.#container.innerHTML = "";
 
 		// CREATE THE CONTAINER IF NOT FOUND
 		if (!this.#container) {
