@@ -1,11 +1,13 @@
 export default class Form {
 	#rendered = false;
+	#container = null;
 	#fields = [];
 
 	constructor(config = {}) {
 		const {
 			id = "gen-form",
 			name = "gen-form",
+			structure = 'inline',
 			classList = [],
 			method = "GET",
 			action = null,
@@ -14,7 +16,9 @@ export default class Form {
 		this.id = id;
 		this.name = name;
 		this.method = method;
+		this.classList = classList;
 		this.action = action;
+		this.structure = structure;
 	}
 
 	setEvents(events = {}) {
@@ -90,7 +94,7 @@ export default class Form {
 		}
 
 		// create form
-		const form = document.createElement("form");
+		let form = document.createElement("form");
 		form.id = this.id;
 		form.name = this.name;
 		form.method = this.method;
@@ -102,21 +106,32 @@ export default class Form {
 		for (const event in this.events) {
 			if (Object.hasOwnProperty.call(this.events, event)) {
 				const eventFunction = this.events[event];
-				this.#attachEvents(this.id, event, eventFunction);
+				form = this.#attachEvents(form, event, eventFunction, 'node');
 			}
 		}
 
 		// generate and add fields
-		for (let index = 0; index < this.fieldList.length; index++) {
-			const fieldObj = this.fieldList[index];
+		for (let index = 0; index < this.#fields.length; index++) {
+			const fieldObj = this.#fields[index];
 			const field = this.#generate(fieldObj);
-			form.appendChild(field);
+
+			if (this.structure == "stack") {
+				const fieldContainer = document.createElement('div');
+				fieldContainer.classList.add('gen-field-container');
+				fieldContainer.appendChild(field);
+				form.appendChild(fieldContainer);
+			} else {
+				form.appendChild(field);
+			}
 		}
+
+		this.#container.appendChild(form);
 	}
 
 	#generate(fieldObj) {
+		let field = null;
 		if (fieldObj.type == "select") {
-			const field = document.createElement("select");
+			field = document.createElement("select");
 
 			for (let index = 0; index < fieldObj.options.length; index++) {
 				const optionObj = fieldObj.options[index];
@@ -126,7 +141,7 @@ export default class Form {
 				field.appendChild(option);
 			}
 		} else {
-			const field = document.createElement("input");
+			field = document.createElement("input");
 			field.type = fieldObj.type;
 
 			if (fieldObj.type == "number") {
@@ -138,15 +153,38 @@ export default class Form {
 
 		field.id = fieldObj.id;
 		field.name = fieldObj.name;
+		if (fieldObj.placeholder) field.placeholder = fieldObj.placeholder;
+		if (fieldObj.value) field.value = fieldObj.value;
 
 		// add class
-		for (let index = 0; index < fieldObj.classList.length; index++) {
-			field.classList.add(fieldObj.classList[index]);
+		field.classList.add('gen-field');
+		field.classList.add(...fieldObj.classList);
+
+		for (const event in fieldObj.events) {
+			if (Object.hasOwnProperty.call(fieldObj.events, event)) {
+				const eventMethod = fieldObj.events[event];
+				field = this.#attachEvents(field, event, eventMethod, "node");
+			}
 		}
+
+		// add dataset values
+		for (const dataKey in fieldObj.dataset) {
+			if (Object.hasOwnProperty.call(fieldObj.dataset, dataKey)) {
+				const data = fieldObj.dataset[dataKey];
+				field.dataset[dataKey] = data;
+			}
+		}
+
+		return field;
 	}
 
-	#attachEvents(to, event, eventFunction) {
-		const eventTarget = document.getElementById(to);
+	#attachEvents(to, event, eventFunction, to_type = "id") {
+		let eventTarget = null;
+		if (to_type == "id") {
+			eventTarget = document.getElementById(to);
+		} else {
+			eventTarget = to;
+		}
 		if (eventTarget) {
 			eventTarget.addEventListener(event, eventFunction);
 		} else {
@@ -154,5 +192,6 @@ export default class Form {
 				`Could not add '${event}' event to '#${to} : Element does not Exists!`
 			);
 		}
+		if (to_type == "node") return eventTarget;
 	}
 }
