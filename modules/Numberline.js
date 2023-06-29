@@ -1,5 +1,7 @@
 export default class Numberline {
 	#container = null;
+	#max = 10;
+	#min = -10;
 
 	constructor(config = {}) {
 		const { max = 10, min = -10 } = config;
@@ -13,7 +15,7 @@ export default class Numberline {
 	getMin() { return this.#min }
 
 	createLine() {
-		return Array.from({ length: this.#max - this.#min + 1 }, (_, i) => min + i);
+		return Array.from({ length: this.#max - this.#min + 1 }, (_, i) => this.#min + i);
 	}
 
 	render(containerId = "numberline-container") {
