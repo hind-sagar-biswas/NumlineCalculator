@@ -4,8 +4,15 @@
     margin-inline: auto;
     min-width: 600px;
     justify-content: center;
+
+    overflow-x: auto;
 }
 #form-container {
-    max-width: 200px;
+    max-width: 550px;
     margin: auto;
+
+    form {
+        display: flex;
+        gap: 10px;
+    }
 }
