@@ -9,6 +9,15 @@
   align-items: center;
   position: relative;
 }
+.numberline-position-container div[data-numberline-current="1"]::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 10px solid transparent;
+  border-top-color: #333333;
+  transform: translate(-50%, -50%);
+}
 .numberline-position-container div:first-child {
   border-bottom: 1px solid #333333;
 }

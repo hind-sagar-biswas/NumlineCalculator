@@ -58,13 +58,15 @@ window.addEventListener("load", () => {
 			const parsedExp = parser.parse();
 
 			const operator = new App.operator(parsedExp);
-			console.log(operator.operate());
+			const [result, moves] = operator.operate();
 
-			const numberline = new App.numberline({
+			window.numberline = new App.numberline({
 				min: parsedExp.limit[0],
 				max: parsedExp.limit[1],
 			});
 			numberline.render();
+			console.log(moves);
+			numberline.move(moves);
 		},
 	});
 	form.setFields(formFields);

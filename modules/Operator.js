@@ -5,7 +5,7 @@ export default class Operator {
 	#times;
 	#rotation;
 	#result;
-	#moves; // left:<by>, right:<by>, rotate
+	#moves; // start:<initial>, left:<by>, right:<by>, rotate
 
 	constructor(properties = {}) {
 		const {
@@ -24,6 +24,7 @@ export default class Operator {
 	}
 
 	operate() {
+		this.#moves = [`start:${this.#initial}`];
 		if (this.#final == null) {
 			this.#find_final();
 		} else if (this.#times == null) {
@@ -33,10 +34,9 @@ export default class Operator {
 	}
 
 	#find_times() {
-		this.#moves = [];
 		let times = 0;
 		let current = this.#initial;
-		
+
 		while (current + this.#by <= this.#final) {
 			this.#moves.push(`right:${this.#by}`);
 			times++;
@@ -51,12 +51,10 @@ export default class Operator {
 		this.#result = { times, remainder };
 	}
 	#find_final() {
-		this.#moves = [];
 		let current = this.#initial;
 		for (let index = 0; index < this.#times; index++) {
 			current += this.#by;
-			const move =
-				this.#by < 0 ? `left:${Math.abs(this.#by)}` : `right:${this.#by}`;
+			const move = this.#by < 0 ? `left:${Math.abs(this.#by)}` : `right:${this.#by}`;
 			this.#moves.push(move);
 		}
 		for (let index = 0; index < this.#rotation; index++) {
