@@ -6,6 +6,8 @@ export default class Numberline {
 	constructor(config = {}) {
 		const { max = 10, min = -10 } = config;
 
+		if (max <= min) {return console.error('Maximum value can never be less than or equal to Minimum value')}
+
 		this.#max = max;
 		this.#min = min;
 		this.line = this.createLine();
@@ -45,6 +47,10 @@ export default class Numberline {
 		}
 
 		this.#container.style.display = "flex";
+	}
+
+	moveTo(position) {
+		if (position < this.#min || position > this.#max) return null;
 	}
 
 	#getPositionDivTemplate(position) {

@@ -51,12 +51,14 @@ window.addEventListener("load", () => {
 			e.preventDefault();
 			const inputs = [...e.target];
 			const left = parseInt(inputs[0].value);
-			const operator = inputs[1].value;
+			const generic_operator = inputs[1].value;
 			const right = parseInt(inputs[2].value);
 			
-			const parser = new App.parseExp(left, right, operator);
+			const parser = new App.parseExp(left, right, generic_operator);
 			const parsedExp = parser.parse();
-			console.log(parsedExp);
+
+			const operator = new App.operator(parsedExp);
+			console.log(operator.operate());
 
 			const numberline = new App.numberline({
 				min: parsedExp.limit[0],

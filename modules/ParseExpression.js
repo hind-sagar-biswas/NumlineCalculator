@@ -65,7 +65,7 @@ export default class ParseExpression {
 		};
 	}
 	#div() {
-		const qou = this.left / this.right;
+		const qou = this.left;
 		let lim = [-10, 10];
 		lim[0] = qou > 0 ? -1 * qou - 3 : qou - 3;
 		lim[1] = qou < 0 ? -1 * qou + 3 : qou + 3;
