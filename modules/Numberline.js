@@ -8,9 +8,10 @@ export default class Numberline {
 		const { max = 10, min = -10 } = config;
 
 		if (max <= min) {
-			return console.error(
+			console.error(
 				"Maximum value can never be less than or equal to Minimum value"
 			);
+			return;
 		}
 
 		this.#max = max;
@@ -21,25 +22,29 @@ export default class Numberline {
 	getMax() {
 		return this.#max;
 	}
+
 	getMin() {
 		return this.#min;
 	}
+
 	getCurrentPosition() {
 		const currentNode = document.querySelector('[data-numberline-current="1"]');
 		if (!currentNode) return null;
 		return parseInt(currentNode.parentElement.dataset.numberlinePosition);
 	}
+
 	setCurrentPosition(position) {
 		if (position > this.#max || position < this.#min) {
-			return console.error(
-				"Could not set new position: Position value must be between limit"
+			console.error(
+				"Could not set new position: Position value must be between limits"
 			);
+			return;
 		}
 		const currentPosition = this.getCurrentPosition();
 		if (currentPosition !== null) {
 			document.querySelector(
 				'[data-numberline-current="1"]'
-			).dataset.numberlineCurrent = 0;
+			).dataset.numberlineCurrent = -1;
 		}
 		document.querySelector(
 			`[data-numberline-position="${position}"] > .operation-block`
@@ -47,29 +52,29 @@ export default class Numberline {
 	}
 
 	createLine() {
-		return Array.from(
-			{ length: this.#max - this.#min + 1 },
-			(_, i) => this.#min + i
-		);
+		const length = this.#max - this.#min + 1;
+		const line = new Array(length);
+		for (let i = 0; i < length; i++) {
+			line[i] = this.#min + i;
+		}
+		return line;
 	}
 
 	render(containerId = "numberline-container") {
 		this.#container = document.getElementById(containerId);
-		this.#container.innerHTML = "";
-
-		// CREATE THE CONTAINER IF NOT FOUND
 		if (!this.#container) {
 			const container = document.createElement("div");
 			container.id = containerId;
 			document.body.appendChild(container);
-			this.#container = document.getElementById(containerId);
+			this.#container = container;
 		}
+		this.#container.innerHTML = "";
 
-		// CREATE NUMBER POSITION DIVS FOR THE NUMBER LINE
 		for (let index = 0; index < this.line.length; index++) {
-			this.#container.appendChild(
-				this.#getPositionDivTemplate(this.line[index])
+			const positionDivContainer = this.#getPositionDivTemplate(
+				this.line[index]
 			);
+			this.#container.appendChild(positionDivContainer);
 		}
 
 		this.#container.style.display = "flex";
