@@ -15,45 +15,42 @@ export default class ParseExpression {
 				return this.#mul();
 			case "div":
 				return this.#div();
-
 			default:
 				return null;
 		}
 	}
 
+	#getLimits(value) {
+		const limitOffset = value > 0 ? -3 : 3;
+		return [value + limitOffset, value - limitOffset];
+	}
+
 	#add() {
 		const sum = this.left + this.right;
-		let lim = [-10, 10];
-		lim[0] = sum > 0 ? -1 * sum - 3 : sum - 3;
-		lim[1] = sum < 0 ? -1 * sum + 3 : sum + 3;
+		const limit = this.#getLimits(sum);
 
 		return {
 			initial: this.left,
 			by: this.right,
-			limit: lim,
+			limit,
 		};
 	}
+
 	#sub() {
 		const dif = this.left - this.right;
-		let lim = [-10, 10];
-		lim[0] = dif > 0 ? -1 * dif - 3 : dif - 3;
-		lim[1] = dif < 0 ? -1 * dif + 3 : dif + 3;
+		const limit = this.#getLimits(dif);
 
 		return {
 			initial: this.left,
 			by: -1 * this.right,
-			limit: lim,
+			limit,
 		};
 	}
+
 	#mul() {
 		const pro = this.left * this.right;
-		let lim = [-10, 10];
-		lim[0] = pro > 0 ? -1 * pro - 3 : pro - 3;
-		lim[1] = pro < 0 ? -1 * pro + 3 : pro + 3;
-
-		let rotation = 0;
-		if (this.left < 0) rotation++;
-		if (this.right < 0) rotation++;
+		const limit = this.#getLimits(pro);
+		const rotation = (this.left < 0 ? 1 : 0) + (this.right < 0 ? 1 : 0);
 
 		return {
 			initial: 0,
@@ -61,18 +58,14 @@ export default class ParseExpression {
 			by: Math.abs(this.right),
 			times: Math.abs(this.left),
 			rotation,
-			limit: lim,
+			limit,
 		};
 	}
+
 	#div() {
 		const qou = this.left;
-		let lim = [-10, 10];
-		lim[0] = qou > 0 ? -1 * qou - 3 : qou - 3;
-		lim[1] = qou < 0 ? -1 * qou + 3 : qou + 3;
-
-		let rotation = 0;
-		if (this.left < 0) rotation++;
-		if (this.right < 0) rotation++;
+		const limit = this.#getLimits(qou);
+		const rotation = (this.left < 0 ? 1 : 0) + (this.right < 0 ? 1 : 0);
 
 		return {
 			initial: 0,
@@ -80,7 +73,7 @@ export default class ParseExpression {
 			by: Math.abs(this.right),
 			times: null,
 			rotation,
-			limit: lim,
+			limit,
 		};
 	}
 }

@@ -25,15 +25,17 @@ export default class Operator {
 
 	operate() {
 		this.#moves = [`start:${this.#initial}`];
+
 		if (this.#final == null) {
-			this.#find_final();
+			this.#findFinal();
 		} else if (this.#times == null) {
-			this.#find_times();
+			this.#findTimes();
 		}
+
 		return [this.#result, this.#moves];
 	}
 
-	#find_times() {
+	#findTimes() {
 		let times = 0;
 		let current = this.#initial;
 
@@ -42,25 +44,33 @@ export default class Operator {
 			times++;
 			current += this.#by;
 		}
+
+		times *= Math.pow(-1, this.#rotation);
+
 		for (let index = 0; index < this.#rotation; index++) {
-			times *= -1;
 			this.#moves.push("rotate");
 		}
 
 		let remainder = (this.#final - current) * Math.pow(-1, this.#rotation);
 		this.#result = { times, remainder };
 	}
-	#find_final() {
+
+	#findFinal() {
 		let current = this.#initial;
+
 		for (let index = 0; index < this.#times; index++) {
 			current += this.#by;
-			const move = this.#by < 0 ? `left:${Math.abs(this.#by)}` : `right:${this.#by}`;
+			const move =
+				this.#by < 0 ? `left:${Math.abs(this.#by)}` : `right:${this.#by}`;
 			this.#moves.push(move);
 		}
+
+		current *= Math.pow(-1, this.#rotation);
+
 		for (let index = 0; index < this.#rotation; index++) {
-			current *= -1;
 			this.#moves.push("rotate");
 		}
+
 		this.#result = { final: current };
 	}
 }

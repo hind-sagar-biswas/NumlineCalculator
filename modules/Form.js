@@ -7,7 +7,7 @@ export default class Form {
 		const {
 			id = "gen-form",
 			name = "gen-form",
-			structure = 'inline',
+			structure = "inline",
 			classList = [],
 			method = "GET",
 			action = null,
@@ -25,7 +25,7 @@ export default class Form {
 		this.events = events;
 		if (this.#rendered) {
 			for (const event in events) {
-				if (Object.hasOwnProperty.call(events, event)) {
+				if (events.hasOwnProperty(event)) {
 					const eventFunction = events[event];
 					this.#attachEvents(this.id, event, eventFunction);
 				}
@@ -34,25 +34,21 @@ export default class Form {
 	}
 
 	setFields(fieldList = []) {
-		this.#fields = [];
-		for (let index = 0; index < fieldList.length; index++) {
-			const field = fieldList[index];
-			let {
+		this.#fields = fieldList.map((field, index) => {
+			const {
 				type = "text",
-				id = null,
+				id = `gen-${type}-field-${index}`,
 				classList = [],
-				name = null,
+				name = `gen-${type}-field-${index}`,
 				placeholder = null,
 				value = null,
 				min = null,
 				max = null,
 				step = null,
 				options = [],
-				dataset = [],
-				events = [],
+				dataset = {},
+				events = {},
 			} = field;
-			id = id || `gen-${type}-field-${index}`;
-			name = name || `gen-${type}-field-${index}`;
 
 			const build = {
 				type,
@@ -65,21 +61,16 @@ export default class Form {
 				placeholder,
 			};
 
-			switch (type) {
-				case "number":
-					build["min"] = min;
-					build["max"] = max;
-					build["step"] = step || 1;
-					break;
-				case "select":
-					build["options"] = options;
-					break;
-				default:
-					break;
+			if (type === "number") {
+				build.min = min;
+				build.max = max;
+				build.step = step || 1;
+			} else if (type === "select") {
+				build.options = options;
 			}
 
-			this.#fields.push(build);
-		}
+			return build;
+		});
 	}
 
 	render(containerId = "form-container") {
@@ -104,47 +95,46 @@ export default class Form {
 
 		// Add events to the form
 		for (const event in this.events) {
-			if (Object.hasOwnProperty.call(this.events, event)) {
+			if (this.events.hasOwnProperty(event)) {
 				const eventFunction = this.events[event];
-				form = this.#attachEvents(form, event, eventFunction, 'node');
+				form = this.#attachEvents(form, event, eventFunction, "node");
 			}
 		}
 
 		// generate and add fields
-		for (let index = 0; index < this.#fields.length; index++) {
-			const fieldObj = this.#fields[index];
+		this.#fields.forEach((fieldObj) => {
 			const field = this.#generate(fieldObj);
 
-			if (this.structure == "stack") {
-				const fieldContainer = document.createElement('div');
-				fieldContainer.classList.add('gen-field-container');
+			if (this.structure === "stack") {
+				const fieldContainer = document.createElement("div");
+				fieldContainer.classList.add("gen-field-container");
 				fieldContainer.appendChild(field);
 				form.appendChild(fieldContainer);
 			} else {
 				form.appendChild(field);
 			}
-		}
+		});
 
 		this.#container.appendChild(form);
 	}
 
 	#generate(fieldObj) {
 		let field = null;
-		if (fieldObj.type == "select") {
+
+		if (fieldObj.type === "select") {
 			field = document.createElement("select");
 
-			for (let index = 0; index < fieldObj.options.length; index++) {
-				const optionObj = fieldObj.options[index];
+			fieldObj.options.forEach((optionObj) => {
 				const option = document.createElement("option");
 				option.value = optionObj.value;
 				option.textContent = optionObj.name;
 				field.appendChild(option);
-			}
+			});
 		} else {
 			field = document.createElement("input");
 			field.type = fieldObj.type;
 
-			if (fieldObj.type == "number") {
+			if (fieldObj.type === "number") {
 				if (fieldObj.min) field.min = fieldObj.min;
 				if (fieldObj.max) field.max = fieldObj.max;
 				field.step = fieldObj.step;
@@ -157,11 +147,11 @@ export default class Form {
 		if (fieldObj.value) field.value = fieldObj.value;
 
 		// add class
-		field.classList.add('gen-field');
+		field.classList.add("gen-field");
 		field.classList.add(...fieldObj.classList);
 
 		for (const event in fieldObj.events) {
-			if (Object.hasOwnProperty.call(fieldObj.events, event)) {
+			if (fieldObj.events.hasOwnProperty(event)) {
 				const eventMethod = fieldObj.events[event];
 				field = this.#attachEvents(field, event, eventMethod, "node");
 			}
@@ -169,7 +159,7 @@ export default class Form {
 
 		// add dataset values
 		for (const dataKey in fieldObj.dataset) {
-			if (Object.hasOwnProperty.call(fieldObj.dataset, dataKey)) {
+			if (fieldObj.dataset.hasOwnProperty(dataKey)) {
 				const data = fieldObj.dataset[dataKey];
 				field.dataset[dataKey] = data;
 			}
@@ -178,20 +168,23 @@ export default class Form {
 		return field;
 	}
 
-	#attachEvents(to, event, eventFunction, to_type = "id") {
+	#attachEvents(to, event, eventFunction, toType = "id") {
 		let eventTarget = null;
-		if (to_type == "id") {
+
+		if (toType === "id") {
 			eventTarget = document.getElementById(to);
 		} else {
 			eventTarget = to;
 		}
+
 		if (eventTarget) {
 			eventTarget.addEventListener(event, eventFunction);
 		} else {
 			console.warn(
-				`Could not add '${event}' event to '#${to} : Element does not Exists!`
+				`Could not add '${event}' event to '#${to}': Element does not exist!`
 			);
 		}
-		if (to_type == "node") return eventTarget;
+
+		if (toType === "node") return eventTarget;
 	}
 }
