@@ -87,7 +87,7 @@ export default class Numberline {
 		this.#moves = moves;
 		this.#moveTo(0)
 			.then(() => {
-				console.log("Recursive calls completed successfully.");
+				console.info("Numline Animations completed successfully.");
 			})
 			.catch((err) => {
 				console.error(err);
@@ -96,7 +96,7 @@ export default class Numberline {
 
 	#moveTo(serial) {
 		if (serial >= this.#moves.length) {
-			return Promise.reject();
+			return Promise.resolve();
 		}
 
 		const time = 300;

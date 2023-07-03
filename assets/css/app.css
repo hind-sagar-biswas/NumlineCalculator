@@ -93,5 +93,8 @@ h1, h2, h3 {
 }
 #form-container form {
   display: flex;
-  gap: 10px;
+  gap: 8px;
+}
+#form-container form select {
+  min-width: 40px;
 }/*# sourceMappingURL=app.css.map */
