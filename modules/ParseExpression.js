@@ -57,8 +57,8 @@ export default class ParseExpression {
 		return {
 			initial: 0,
 			final: null,
-			by: Math.abs(this.right),
-			times: Math.abs(this.left),
+			by: Math.abs(this.left),
+			times: Math.abs(this.right),
 			rotation,
 			limit,
 		};
