@@ -85,7 +85,7 @@ export default class Simplifier {
 		}
 		if (y.type == 'negative') {
 			steps.push(
-				`Since <code>${x.val}</code> is <b>${x.type}</b>, rotate the final value ${ x.type == 'negative' ? 'again' : '' } (<i>i.e. Negate it</i>)`,
+				`Since <code>${y.val}</code> is <b>${y.type}</b>, rotate the final value ${ x.type == 'negative' ? 'again' : '' } (<i>i.e. Negate it</i>)`,
 				this.#negation(this.#by * this.#times * ( x.type == 'negative' ? -1 : 1))
 			);
 		}
