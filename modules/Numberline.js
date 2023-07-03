@@ -49,6 +49,8 @@ export default class Numberline {
 		document.querySelector(
 			`[data-numberline-position="${position}"] > .operation-block`
 		).dataset.numberlineCurrent = 1;
+
+		this.#scrollToCurrent();
 	}
 
 	createLine() {
@@ -78,6 +80,7 @@ export default class Numberline {
 		}
 
 		this.#container.style.display = "flex";
+		this.setCurrentPosition(0);
 	}
 
 	move(moves) {
@@ -96,7 +99,7 @@ export default class Numberline {
 			return Promise.reject();
 		}
 
-		const time = 100 * (serial + 1);
+		const time = 300;
 		const [movement, number] = this.#moves[serial].split(":");
 		const parsedNumber = parseInt(number);
 
@@ -154,4 +157,19 @@ export default class Numberline {
 
 		return positionDivContainer;
 	}
+
+	#scrollToCurrent() {
+		const targetElement = document.querySelector(
+			'div[data-numberline-current="1"]'
+		);
+		if (targetElement) {
+			const container = document.getElementById("numberline-container");
+			const containerWidth = container.offsetWidth;
+			const targetElementWidth = targetElement.offsetWidth;
+			const targetElementOffsetLeft = targetElement.offsetLeft;
+			const scrollLeft =
+				targetElementOffsetLeft - containerWidth + targetElementWidth / 2;
+			container.scrollLeft = scrollLeft;
+		}
+	};
 }

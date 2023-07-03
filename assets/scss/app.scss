@@ -1,10 +1,20 @@
 @import 'numberline';
 
+html {
+    scroll-behavior: smooth;
+}
+body{
+    background-color: beige;
+}
+
+h1, h2, h3 {
+    color: darken(brown, 15%);
+}
+
+
 #numberline-container {
     margin-inline: auto;
-    min-width: 600px;
-    justify-content: center;
-
+    scroll-behavior: smooth;
     overflow-x: auto;
 }
 #form-container {

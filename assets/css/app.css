@@ -16,7 +16,7 @@
   transform: translate(-50%, -50%);
 }
 .numberline-position-container div[data-numberline-current="1"]::before {
-  border-top-color: red;
+  border-top-color: brown;
 }
 .numberline-position-container div[data-numberline-current="-1"]::before {
   border-top-color: rgba(51, 51, 51, 0.3803921569);
@@ -46,10 +46,21 @@
   border-top-color: var(--color);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: beige;
+}
+
+h1, h2, h3 {
+  color: #681a1a;
+}
+
 #numberline-container {
   margin-inline: auto;
-  min-width: 600px;
-  justify-content: center;
+  scroll-behavior: smooth;
   overflow-x: auto;
 }
 

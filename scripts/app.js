@@ -38,7 +38,7 @@ const formFields = [
 		type: "submit",
 		name: "calculate",
 		name: "submit",
-		classList: ["btn", "btn-primary"],
+		classList: ["btn", "btn-warning"],
 	},
 ];
 
@@ -65,7 +65,6 @@ window.addEventListener("load", () => {
 				max: parsedExp.limit[1],
 			});
 			numberline.render();
-			console.log(moves);
 			numberline.move(moves);
 		},
 	});

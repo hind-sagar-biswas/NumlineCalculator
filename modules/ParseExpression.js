@@ -21,8 +21,10 @@ export default class ParseExpression {
 	}
 
 	#getLimits(value) {
-		const limitOffset = value > 0 ? -3 : 3;
-		return [value + limitOffset, value - limitOffset];
+		const limitOffset = value > 0 ? -2 : 2;
+		const min = value < 0 ? value - limitOffset : (-1 * value) + limitOffset;
+		const max = value > 0 ? value - limitOffset : (-1 * value) + limitOffset;
+		return [min, max];
 	}
 
 	#add() {
@@ -37,8 +39,8 @@ export default class ParseExpression {
 	}
 
 	#sub() {
-		const dif = this.left - this.right;
-		const limit = this.#getLimits(dif);
+		const sum = this.left + this.right;
+		const limit = this.#getLimits(sum);
 
 		return {
 			initial: this.left,
