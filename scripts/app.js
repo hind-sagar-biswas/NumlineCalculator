@@ -43,9 +43,11 @@ const formFields = [
 ];
 
 window.addEventListener("load", () => {
+	const simplifier = new App.simplifier();
 	const form = new App.form({
 		structure: "stack",
 	});
+
 	form.setEvents({
 		submit: (e) => {
 			e.preventDefault();
@@ -59,6 +61,9 @@ window.addEventListener("load", () => {
 
 			const operator = new App.operator(parsedExp);
 			const [result, moves] = operator.operate();
+
+			const simp = simplifier.simplify({ left, right, operator: generic_operator }, parsedExp);
+			document.getElementById("simplification-container").innerHTML = simp;
 
 			window.numberline = new App.numberline({
 				min: parsedExp.limit[0],
