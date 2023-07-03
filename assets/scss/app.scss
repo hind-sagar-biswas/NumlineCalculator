@@ -8,8 +8,38 @@ body{
 }
 
 h1, h2, h3 {
+    // margin-top: 10px;
     color: darken(brown, 15%);
 }
+
+/* Track */
+::-webkit-scrollbar {
+  width: 11px;
+  /* width of the scrollbar */
+}
+
+/* Track (background) */
+::-webkit-scrollbar-track {
+  background: lighten(brown, 50%);
+  /* background color of the track */
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: brown;
+//   border-radius: 7px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: darken(brown, 15%);
+  /* color of the scrollbar handle on hover */
+}
+
+// .row > div > div {
+//     background-color: lighten(beige, 3%);
+//     min-height: 100%;
+// }
 
 
 #numberline-container {

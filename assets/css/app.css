@@ -58,6 +58,29 @@ h1, h2, h3 {
   color: #681a1a;
 }
 
+/* Track */
+::-webkit-scrollbar {
+  width: 11px;
+  /* width of the scrollbar */
+}
+
+/* Track (background) */
+::-webkit-scrollbar-track {
+  background: #f5d9d9;
+  /* background color of the track */
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: brown;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #681a1a;
+  /* color of the scrollbar handle on hover */
+}
+
 #numberline-container {
   margin-inline: auto;
   scroll-behavior: smooth;
